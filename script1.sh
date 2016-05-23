@@ -19,9 +19,18 @@ while getopts c:w:e: j; do
   	echo "got in 3"
   fi
 done
-
-if [ TOTAL_MEMORY ]
-
 echo $USED_MEMORY
-echo $TOTAL_MEMORY
-echo jejemon
+
+criticalMem=$((( $TOTAL_MEMORY / 100 ) * $c ))
+warningMem=$((( $TOTAL_MEMORY / 100 ) * $w ))
+
+echo $criticalMem
+echo $warningMem
+if [ "$USED_MEMORY" -ge "$criticalMem" ]; then
+	echo 'a'
+elif [ "$USED_MEMORY" -ge "$warningMem" ]; then
+	echo 'b'
+else
+	echo 'c'
+fi
+
