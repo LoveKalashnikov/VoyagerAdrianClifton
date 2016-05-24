@@ -2,6 +2,7 @@
 TOTAL_MEMORY=$( free | grep Mem: | awk '{print $2 }' )
 USED_MEMORY=$( free | grep Mem: | awk '{print $3 }' )
 TOP_PROCESSES=$( ps aux | sort -nk +4 | tail | awk '{print $11}')
+subject=$(date +'%Y%m%d %H:%M memory check -critical')
 while getopts c:w:e: j; do
   if [ $j = "c" ]; then
   	c=$OPTARG
@@ -12,7 +13,6 @@ while getopts c:w:e: j; do
   fi
 done
 
-echo $TOP_PROCESSES
 if [ "$c" = "" ]; then 
 	echo "put value for critical threshold (c)"
 	exit
@@ -21,7 +21,7 @@ if [ "$w" = "" ]; then
 	echo "put value for warning threshold (w)"
 	exit
 fi
-if [ "$e" = "" ]; then
+if  [ "$e" = "" ]; then
 	echo "put value for email (e)"
 	exit
 fi
@@ -35,6 +35,7 @@ fi
 
 if [ "$c" -gt 100 ]; then
 	echo "c must be less than 100"
+
 	exit
 fi
 
@@ -45,6 +46,7 @@ fi
 
 if [ "$USED_MEMORY" -ge "$criticalMem" ]; then
 	echo 2
+	echo $TOP_PROCESSES | mail -s "$subject" $e
 	exit 2
 elif [ "$USED_MEMORY" -ge "$warningMem" ]; then
 	echo 1
