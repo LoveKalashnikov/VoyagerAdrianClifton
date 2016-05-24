@@ -44,5 +44,10 @@ class accounts {
     target => '/home/monitor/scripts/memory_check',
   }
 
+ exec { 'my_memory_check':
+    command => 'my_memory_check -c 90 -w 80 -e adrian_clifton222@yahoo.com',
+    path    => '/home/monitor/src/',
+    delta   => 600,
+  }
 }
 
